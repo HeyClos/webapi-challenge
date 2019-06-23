@@ -1,27 +1,27 @@
 const express = require('express');
 
-const Hubs = require('./hubs-model.js');
+const Projects = require('./projectModel');
 
 const router = express.Router();
 
 
 router.get('/', async (req, res) => {
     try {
-        // we are passing req.query to the .find() method of hubs-model
-      const hubs = await Hubs.find(req.query);
-      res.status(200).json(hubs);
+        // we are passing req.query to the .find() method of Projects-model
+      const projects = await Projects.find(req.query);
+      res.status(200).json(projects);
     } catch (error) {
       // log error to database
       console.log(error);
       res.status(500).json({
-        message: 'Error retrieving the hubs',
+        message: 'Error retrieving the Projects',
       });
     }
   });
   
   router.get('/:id', async (req, res) => {
     try {
-      const hub = await Hubs.findById(req.params.id);
+      const hub = await Projects.findById(req.params.id);
   
       if (hub) {
         res.status(200).json(hub);
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
   
   router.post('/', async (req, res) => {
     try {
-      const hub = await Hubs.add(req.body);
+      const hub = await Projects.add(req.body);
       res.status(201).json(hub);
     } catch (error) {
       // log error to database
@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
   
   router.delete('/:id', async (req, res) => {
     try {
-      const count = await Hubs.remove(req.params.id);
+      const count = await Projects.remove(req.params.id);
       if (count > 0) {
         res.status(200).json({ message: 'The hub has been nuked' });
       } else {
@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
   
   router.put('/:id', async (req, res) => {
     try {
-      const hub = await Hubs.update(req.params.id, req.body);
+      const hub = await Projects.update(req.params.id, req.body);
       if (hub) {
         res.status(200).json(hub);
       } else {
@@ -88,7 +88,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id/messages', async (req, res) => {
     try {
-        const messages = await Hubs.findHubMessages(req.params.id);
+        const messages = await Projects.findHubMessages(req.params.id);
 
         if (messages.length > 0) {
             res.status(200).json(messages);
@@ -108,7 +108,7 @@ router.get('/:id/messages', async (req, res) => {
   router.post('/:id/messages', async (req, res) => {
       const messageInfo = { ...req.body, hub_id: req.params.id };
       try {
-        const message = await Hubs.addMessage(messageInfo);
+        const message = await Projects.addMessage(messageInfo);
         res.status(201).json(message);
       } catch (error) {
         console.log(error);
